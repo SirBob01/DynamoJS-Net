@@ -42,9 +42,9 @@ interface Signaler {
   /**
    * Send a network event
    *
-   * @param data Signaling message
+   * @param message Signaling message
    */
-  send(data: SignalingMessage): void;
+  send(message: SignalingMessage): void;
 
   /**
    * Listen for network events
