@@ -36,6 +36,11 @@ class Connection<
   >;
 
   /**
+   * Disconnection handler
+   */
+  private disconnectHandlers: (() => void)[];
+
+  /**
    * Create a new connection instance
    */
   protected constructor(
@@ -46,6 +51,7 @@ class Connection<
     this.peer = new wrtc.RTCPeerConnection({ iceServers });
     this.channels = new Map();
     this.removeListenerHandlers = new Map();
+    this.disconnectHandlers = [];
 
     const statuses = new Map<Channel, boolean>();
     for (const name in channelConfigs) {
@@ -73,6 +79,13 @@ class Connection<
         });
         if (allOpen) onReady(this);
       });
+    });
+
+    // Attach handler for disconnection
+    this.peer.addEventListener('connectionstatechange', () => {
+      if (this.peer.connectionState === 'disconnected') {
+        this.disconnectHandlers.forEach((handler) => handler());
+      }
     });
   }
 
@@ -293,8 +306,9 @@ class Connection<
   }
 
   /**
-   * Listen for an event
+   * Listen for an event on a channel
    *
+   * @param channel Name of the data channel to send through
    * @param event   Name of the event
    * @param handler Received data handler function
    */
@@ -332,6 +346,21 @@ class Connection<
   }
 
   /**
+   * Listen for an event on all channels
+   *
+   * @param event   Name of the event
+   * @param handler Received data handler function
+   */
+  onAll<Event extends keyof ListenEvent>(
+    event: Event,
+    handler: ListenEvent[Event]
+  ) {
+    [...this.channels.keys()].forEach((channel) => {
+      this.on(channel, event, handler);
+    });
+  }
+
+  /**
    * Remove network event listeners
    *
    * Ommitting the handler will remove all listeners under channel -> event
@@ -362,6 +391,30 @@ class Connection<
       handlerMap?.get(handler)?.();
       handlerMap?.delete(handler);
     }
+  }
+
+  /**
+   * Add a disconnection handler
+   */
+  addDisconnectHandler(handler: () => void) {
+    this.disconnectHandlers.push(handler);
+  }
+
+  /**
+   * Remove a disconnection handler
+   */
+  removeDisconnectHandler(handler: () => void) {
+    const index = this.disconnectHandlers.findIndex(handler);
+    if (index > -1) {
+      this.disconnectHandlers.splice(index, 1);
+    }
+  }
+
+  /**
+   * Remove all disconnection handlers
+   */
+  clearDisconnectHandlers() {
+    this.disconnectHandlers.splice(0, this.disconnectHandlers.length);
   }
 }
 
