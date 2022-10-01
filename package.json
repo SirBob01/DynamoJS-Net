@@ -1,6 +1,6 @@
 {
   "name": "dynamojs-net",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Networking library for games",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -33,8 +33,8 @@
   "homepage": "https://github.com/SirBob01/DynamoJS-Net#readme",
   "dependencies": {
     "@types/msgpack-lite": "^0.1.8",
+    "core-js": "^3.25.3",
     "isomorphic-webrtc": "^0.2.2",
-    "isomorphic-ws": "^5.0.0",
     "msgpack-lite": "^0.1.26",
     "node-pre-gyp": "^0.17.0",
     "typescript": "^4.8.4"
