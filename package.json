@@ -1,0 +1,49 @@
+{
+  "name": "dynamojs-net",
+  "version": "1.0.0",
+  "description": "Networking library for games",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "lint": "prettier --write \"src/**/*.ts\"; eslint \"./src/**/*.ts\" --fix",
+    "prepare": "rm -rf build && tsc"
+  },
+  "files": [
+    "branchBuild.js",
+    "build"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SirBob01/DynamoJS-Net.git"
+  },
+  "keywords": [
+    "networking",
+    "wrtc",
+    "client",
+    "server",
+    "peer"
+  ],
+  "author": "Keith Leonardo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SirBob01/DynamoJS-Net/issues"
+  },
+  "homepage": "https://github.com/SirBob01/DynamoJS-Net#readme",
+  "dependencies": {
+    "@types/msgpack-lite": "^0.1.8",
+    "isomorphic-webrtc": "^0.2.2",
+    "isomorphic-ws": "^5.0.0",
+    "msgpack-lite": "^0.1.26",
+    "node-pre-gyp": "^0.17.0",
+    "typescript": "^4.8.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
+    "eslint": "^8.23.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  }
+}
