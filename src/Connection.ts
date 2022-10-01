@@ -281,11 +281,11 @@ class Connection<
   }
 
   /**
-   * Get the wrtc.RTCDataChannel
+   * Get the RTCDataChannel
    *
    * @param name
    */
-  getChannel(name: Channel) {
+  private getChannel(name: Channel) {
     return this.channels.get(name);
   }
 
@@ -395,6 +395,8 @@ class Connection<
 
   /**
    * Add a disconnection handler
+   *
+   * @param handler Disconnection handler function
    */
   addDisconnectHandler(handler: () => void) {
     this.disconnectHandlers.push(handler);
@@ -402,6 +404,8 @@ class Connection<
 
   /**
    * Remove a disconnection handler
+   *
+   * @param handler Disconnection handler function
    */
   removeDisconnectHandler(handler: () => void) {
     const index = this.disconnectHandlers.findIndex(handler);
