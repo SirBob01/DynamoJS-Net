@@ -304,7 +304,7 @@ class Connection<
   ) {
     const channelObject = this.getChannel(channel);
     if (channelObject && channelObject.readyState === 'open') {
-      const message = encode({ event, data });
+      const message = encode([event, data]);
       const compressed = deflate(message);
       channelObject.send(compressed);
     }
@@ -329,8 +329,8 @@ class Connection<
     const listener = (ev: { data: Buffer }) => {
       const compressed = inflate(new Uint8Array(ev.data));
       const message = decode(compressed) as Message<ListenEvent>;
-      if (event === message.event) {
-        handler(...message.data);
+      if (event === message[0]) {
+        handler(...message[1]);
       }
     };
     channelObject.addEventListener('message', listener);

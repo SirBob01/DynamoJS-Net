@@ -6,16 +6,6 @@ type EventMap = Record<string, any>;
 /**
  * Message type
  */
-interface Message<Event extends EventMap> {
-  /**
-   * Name of the event
-   */
-  event: keyof Event;
-
-  /**
-   * Data for the event
-   */
-  data: any[];
-}
+type Message<Event extends EventMap> = [keyof Event, any[]];
 
 export type { EventMap, Message };
