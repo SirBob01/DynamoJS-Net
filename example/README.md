@@ -4,7 +4,9 @@ A basic chatroom client-server application using `dynamojs-net` and `ws`.
 
 ## Installation
 
-Run `npm i` or `yarn` to install the necessary dependencies
+At the top level `DynamoJS-Net` directory, you must run the build script `npm run build` or `yarn build` to generate the transpiled source files.
+
+Run `npm i` or `yarn` here to install the necessary dependencies
 
 ## Usage
 
