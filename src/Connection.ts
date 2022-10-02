@@ -438,6 +438,17 @@ class Connection<
   clearDisconnectHandlers() {
     this.disconnectHandlers.splice(0, this.disconnectHandlers.length);
   }
+
+  /**
+   * Close the connection
+   *
+   * A new Connection must then be instanced to re-communicate
+   * with the remote peer.
+   */
+  close() {
+    this.peer.close();
+    delete this.peer;
+  }
 }
 
 export default Connection;

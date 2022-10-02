@@ -1,6 +1,6 @@
 {
   "name": "dynamojs-net",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "Networking library for games",
   "main": "build/index.js",
   "types": "build/index.d.ts",
