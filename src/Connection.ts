@@ -78,15 +78,15 @@ class Connection<
         statuses.forEach((status) => {
           allOpen &&= status;
         });
-        if (allOpen) onReady(this);
+        if (allOpen) {
+          onReady(this);
+        }
       });
-    });
 
-    // Attach handler for disconnection
-    this.peer.addEventListener('connectionstatechange', () => {
-      if (this.peer.connectionState === 'disconnected') {
+      // If a channel closes, then the client is disconnected
+      channel.addEventListener('close', () => {
         this.disconnectHandlers.forEach((handler) => handler());
-      }
+      });
     });
   }
 
@@ -142,6 +142,12 @@ class Connection<
           switch (connection.peer.connectionState) {
             case 'failed':
               reject(new Error('Failed to establish RTC connection'));
+              break;
+            case 'closed':
+              connection.disconnectHandlers.forEach((handler) => handler());
+              break;
+            case 'disconnected':
+              connection.disconnectHandlers.forEach((handler) => handler());
               break;
             default:
               break;
@@ -208,6 +214,12 @@ class Connection<
           switch (connection.peer.connectionState) {
             case 'failed':
               reject(new Error('Failed to establish RTC connection'));
+              break;
+            case 'closed':
+              connection.disconnectHandlers.forEach((handler) => handler());
+              break;
+            case 'disconnected':
+              connection.disconnectHandlers.forEach((handler) => handler());
               break;
             default:
               break;

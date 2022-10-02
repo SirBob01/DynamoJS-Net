@@ -1,6 +1,6 @@
 {
   "name": "dynamojs-net",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Networking library for games",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "lint": "prettier --write \"src/**/*.ts\"; eslint \"./src/**/*.ts\" --fix",
-    "prepare": "rm -rf build && tsc",
+    "prepare": "rm -r build; tsc",
     "postinstall": "node branchBuild.js"
   },
   "files": [
