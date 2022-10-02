@@ -1,8 +1,9 @@
 import { encode, decode } from 'msgpack-lite';
+import { deflate, inflate } from 'pako';
 import { ChannelMap } from './Channel';
 import { EventMap, Message } from './Event';
-import wrtc from 'isomorphic-webrtc';
 import { Signaler } from './Signaler';
+import wrtc from 'isomorphic-webrtc';
 
 /**
  * Configuration for setting up a connection
@@ -14,8 +15,8 @@ interface ConnectionConfiguration<Channel extends string> {
 
 class Connection<
   Channel extends string,
-  ListenEvent extends EventMap,
-  EmitEvent extends EventMap
+  ListenEvent extends EventMap = EventMap,
+  EmitEvent extends EventMap = ListenEvent
 > {
   /**
    * Peer connection
@@ -98,7 +99,7 @@ class Connection<
   static createCall<
     Channel extends string,
     ListenEvent extends EventMap = EventMap,
-    EmitEvent extends EventMap = EventMap
+    EmitEvent extends EventMap = ListenEvent
   >(signaler: Signaler, config: ConnectionConfiguration<Channel>) {
     return new Promise(
       (
@@ -171,7 +172,7 @@ class Connection<
   static createRecv<
     Channel extends string,
     ListenEvent extends EventMap = EventMap,
-    EmitEvent extends EventMap = EventMap
+    EmitEvent extends EventMap = ListenEvent
   >(signaler: Signaler, config: ConnectionConfiguration<Channel>) {
     return new Promise(
       (
@@ -301,8 +302,12 @@ class Connection<
     event: Event,
     ...data: Parameters<EmitEvent[Event]>
   ) {
-    const message = encode({ event, data });
-    this.getChannel(channel)?.send(message);
+    const channelObject = this.getChannel(channel);
+    if (channelObject && channelObject.readyState === 'open') {
+      const message = encode({ event, data });
+      const compressed = deflate(message);
+      channelObject.send(compressed);
+    }
   }
 
   /**
@@ -322,7 +327,8 @@ class Connection<
 
     // Attach the listener
     const listener = (ev: { data: Buffer }) => {
-      const message: Message<ListenEvent> = decode(new Uint8Array(ev.data));
+      const compressed = inflate(new Uint8Array(ev.data));
+      const message = decode(compressed) as Message<ListenEvent>;
       if (event === message.event) {
         handler(...message.data);
       }
@@ -371,7 +377,7 @@ class Connection<
    * @param event   Name of the event
    * @param handler Received data handler function
    */
-  removeListener<Event extends keyof ListenEvent>(
+  off<Event extends keyof ListenEvent>(
     channel?: Channel,
     event?: Event,
     handler?: ListenEvent[Event]

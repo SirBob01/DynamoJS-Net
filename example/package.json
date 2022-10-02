@@ -1,0 +1,17 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "client": "ts-node-dev src/client.ts",
+    "server": "ts-node-dev src/server.ts"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/ws": "^8.5.3",
+    "dynamojs-net": "file:../build",
+    "ts-node-dev": "^2.0.0",
+    "ws": "^5.0.0"
+  }
+}
