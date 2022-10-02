@@ -64,7 +64,7 @@ interface ServerToClientEvents {
   /**
    * Tell a client to start sending / receiving messages
    */
-  start: () => void;
+  start: (name: string) => void;
 }
 
 export { WSSignaler, channelConfigs };

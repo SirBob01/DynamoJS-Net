@@ -8,7 +8,7 @@ const readline = createInterface({
   output: process.stdout,
 })
 
-// Create a new connection
+// Connect to the server and initiate the signaling process
 const socket = new WebSocket('ws://localhost:8080');
 Connection.createCall<NetworkChannels, ServerToClientEvents, ClientToServerEvents>(
   new WSSignaler(socket),
@@ -22,15 +22,20 @@ Connection.createCall<NetworkChannels, ServerToClientEvents, ClientToServerEvent
 )
 .then((connection) => {
   // Input handler
-  const handleInput = () => {
-    readline.question('>> ', (answer) => {
+  const handleInput = (name: string) => {
+    readline.question(`${name}: `, (answer) => {
       connection.emit('default', 'message', answer);
       readline.prompt(true);
-      handleInput();
+      handleInput(name);
     });
   }
 
-  // Add network event listeners
+  // Handle start up
+  connection.on('default', 'start', (name) => {
+    handleInput(name);
+  });
+
+  // Handle receiving a message
   connection.on('default', 'message', (message) => {
     process.stdout.clearLine(0);
     process.stdout.cursorTo(0);
@@ -38,9 +43,6 @@ Connection.createCall<NetworkChannels, ServerToClientEvents, ClientToServerEvent
     // eslint-disable-next-line no-console
     console.log(message);
     readline.prompt(true);
-  });
-  connection.on('default', 'start', () => {
-    handleInput();
   });
 
   // Begin
