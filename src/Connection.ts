@@ -316,9 +316,13 @@ class Connection<
   ) {
     const channelObject = this.getChannel(channel);
     if (channelObject && channelObject.readyState === 'open') {
-      const message = encode([event, data]);
-      const compressed = deflate(message);
-      channelObject.send(compressed);
+      try {
+        const message = encode([event, data]);
+        const compressed = deflate(message);
+        channelObject.send(compressed);
+      } catch {
+        // Send failed, do nothing
+      }
     }
   }
 
