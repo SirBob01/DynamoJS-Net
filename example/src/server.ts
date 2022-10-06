@@ -6,7 +6,7 @@ import { channelConfigs, NetworkChannels, ClientToServerEvents, ServerToClientEv
 const connections: Map<Connection<NetworkChannels, ClientToServerEvents, ServerToClientEvents>, string> = new Map();
 
 // Create a WebSocket server instance to manage the signaling process
-const io = new WebSocket.Server({ port: 8080 });
+const io = new WebSocket.Server({ port: 8000 });
 io.on('connection', (socket) => {
   Connection.createRecv<NetworkChannels, ClientToServerEvents, ServerToClientEvents>(
     new WSSignaler(socket),

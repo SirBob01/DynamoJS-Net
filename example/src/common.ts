@@ -31,7 +31,6 @@ class WSSignaler {
 const channelConfigs = {
   default: {
     id: 0,
-    reliable: true,
     ordered: true,
   }
 }

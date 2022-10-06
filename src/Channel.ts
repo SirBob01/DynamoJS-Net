@@ -8,15 +8,17 @@ interface ChannelConfiguration {
   id: number;
 
   /**
-   * Packets will be retransmitted until they arrive
-   * at the other side
-   */
-  reliable: boolean;
-
-  /**
    * Packets will be received in order
    */
   ordered: boolean;
+
+  /**
+   * Maximum times packets will be retransmitted until
+   * they arrive at the other side
+   *
+   * If not provided, there is no upper limit and browser will keep trying
+   */
+  maxRetransmits?: number;
 }
 
 /**

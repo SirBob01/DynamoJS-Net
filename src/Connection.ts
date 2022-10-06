@@ -56,9 +56,8 @@ class Connection<
 
     const statuses = new Map<Channel, boolean>();
     for (const name in channelConfigs) {
-      const { id, reliable, ordered } = channelConfigs[name];
+      const { id, maxRetransmits, ordered } = channelConfigs[name];
       const negotiated = true;
-      const maxRetransmits = reliable ? undefined : 0;
       const channel = this.peer.createDataChannel(name, {
         ordered,
         maxRetransmits,

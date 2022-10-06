@@ -9,7 +9,7 @@ const readline = createInterface({
 })
 
 // Connect to the server and initiate the signaling process
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://localhost:8000');
 Connection.createCall<NetworkChannels, ServerToClientEvents, ClientToServerEvents>(
   new WSSignaler(socket),
   {
